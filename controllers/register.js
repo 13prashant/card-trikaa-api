@@ -1,27 +1,35 @@
-const handleRegister = (req, res, database) => {
-    const { firstName, lastName, email, username, password } = req.body
-    database.users.push({
-        id: '123',
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
-        image: null,
-        mobileNumber: '',
-        whatsappNumber: '',
-        companyName: '',
-        designation: '',
-        role: '',
-        instagramHandle: '',
-        facebookHandle: '',
-        twitterHandle: '',
-        linkedinHandle: '',
-        website: '',
-        email: email,
-        address: '',
-        password: password,
-        joined: new Date()
+const saltRounds = 10;
+
+const handleRegister = (req, res, db, bcrypt) => {
+    const { mobileNumber, email, firstName, lastName, username, password } = req.body
+    const hash = bcrypt.hashSync(password, saltRounds);
+
+    db.transaction(trx => {
+        trx.insert({
+            mobilenumber: mobileNumber,
+            username: username,
+            hash: hash
+        })
+            .into('login')
+            .returning(['mobilenumber', 'username'])
+            .then(loginUser => {
+                trx('users')
+                    .returning('*')
+                    .insert({
+                        username: loginUser[0].username,
+                        firstname: firstName,
+                        lastname: lastName,
+                        mobilenumber: loginUser[0].mobilenumber,
+                        joined: new Date()
+                    })
+                    .then(user => {
+                        res.json(user[0])
+                    })
+            })
+            .then(trx.commit)
+            .catch(trx.rollback);
     })
-    res.json(database.users[database.users.length - 1])
+        .catch(error => res.status(400).json('unable to register!'))
 }
 
 module.exports = {
