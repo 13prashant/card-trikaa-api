@@ -2,6 +2,10 @@
 const handleLogIn = (req, res, db, bcrypt) => {
     const { mobileNumber, username, email, password } = req.body
 
+    // if (!mobileNumber || !username || !email || !password) {
+    //     return res.status(400).json('Cannot login!')
+    // }
+
     db.select('mobilenumber', 'username', 'email', 'hash').from('login')
         .where('mobilenumber', '=', mobileNumber)
         .then(data => bcrypt.compareSync(password, data[0].hash) ?

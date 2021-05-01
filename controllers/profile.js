@@ -1,6 +1,5 @@
 const handleUsername = (req, res, db) => {
     const { user } = req.params
-    console.log(req.params)
     db.select('*').from('users').where({ username: user })
         .then(user => {
             console.log(user)
@@ -67,7 +66,6 @@ const handleUpdate = (req, res, db) => {
                     })
                     .returning('*')
                     .then(user => {
-                        console.log(user)
                         res.json(user[0])
                     })
             })

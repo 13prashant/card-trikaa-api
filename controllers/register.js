@@ -2,6 +2,11 @@ const saltRounds = 10;
 
 const handleRegister = (req, res, db, bcrypt) => {
     const { mobileNumber, email, firstName, lastName, username, password } = req.body
+
+    // if (!mobileNumber || !email || !firstName || !lastName || !username || !password) {
+    //     return res.status(400).json('cannot register!')
+    // }
+
     const hash = bcrypt.hashSync(password, saltRounds);
 
     db.transaction(trx => {
