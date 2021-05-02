@@ -42,29 +42,30 @@ app.listen(PORT || 5000, () => {
 
 
 
-// CREATE TABLE users (
-//       id SERIAL PRIMARY KEY,
-//       username VARCHAR(50) UNIQUE,
-//       mobileNumber BIGINT UNIQUE,
-//       email text UNIQUE,
-//       firstName VARCHAR(20),
-//       lastName VARCHAR(20),
-//       image VARCHAR,
-//       companyName VARCHAR(50),
-//       designation VARCHAR(50),
-//       role VARCHAR(200),
-//       instagramHandle VARCHAR(100),
-//       facebookHandle VARCHAR(100),
-//       twitterHandle VARCHAR(100),
-//       linkedinHandle VARCHAR(100),
-//       website VARCHAR(50),
-//       address VARCHAR(200),
-//       joined TIMESTAMP NOT NULL );
-
-// CREATE TABLE login (
+// CREATE TABLE users(
 //     id SERIAL PRIMARY KEY,
-//     mobileNumber BIGINT UNIQUE,
 //     username VARCHAR(50) UNIQUE,
-//     email text UNIQUE,
+//     mobileNumber TEXT UNIQUE,
+//     whatsappNumber TEXT,
+//     email TEXT UNIQUE,
+//     firstName VARCHAR(20),
+//     lastName VARCHAR(20),
+//     image VARCHAR,
+//     companyName VARCHAR(50),
+//     designation VARCHAR(50),
+//     role VARCHAR(200),
+//     instagramHandle VARCHAR(100),
+//     facebookHandle VARCHAR(100),
+//     twitterHandle VARCHAR(100),
+//     linkedinHandle VARCHAR(100),
+//     website VARCHAR(50),
+//     address VARCHAR(200),
+//     joined TIMESTAMP NOT NULL);
+
+// CREATE TABLE login(
+//     id SERIAL PRIMARY KEY,
+//     mobileNumber TEXT UNIQUE,
+//     username VARCHAR(50) UNIQUE,
+//     email TEXT UNIQUE,
 //     hash VARCHAR(100) NOT NULL
 // );
