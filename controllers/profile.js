@@ -2,22 +2,21 @@ const handleUsername = (req, res, db) => {
     const { user } = req.params
     db.select('*').from('users').where({ username: user })
         .then(user => {
-            console.log(user)
             if (user.length) {
                 res.json(user[0])
             } else {
                 res.status(400).json('no such user found!')
             }
         })
-        .catch(error => res.status(400).json('error getting user!'))
+        .catch(error => res.status(400).json('error getting the user!'))
 }
 
 const e = require("express");
 
 
 const handleUpdate = (req, res, db) => {
+    const { id } = req.params
     const {
-        id,
         userName,
         firstName,
         lastName,
@@ -72,7 +71,7 @@ const handleUpdate = (req, res, db) => {
             .then(trx.commit)
             .catch(trx.rollback)
     })
-        .catch(error => console.log(error))
+        .catch(error => res.status(400).json('error updating the user!'))
 }
 
 module.exports = {
