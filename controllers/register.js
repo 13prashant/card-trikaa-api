@@ -28,12 +28,6 @@ const handleRegister = (req, res, db, bcrypt) => {
                         joined: new Date()
                     })
                     .then(user => {
-                        console.log(user)
-                        if (user.mobilenumber === mobileNumber) {
-                            res.status(400).json('This mobile number is already registered!')
-                        } else if (user.username === username) {
-                            res.status(400).json('This username is not available!')
-                        }
                         res.json(user[0])
                     })
             })
