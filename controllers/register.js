@@ -12,7 +12,7 @@ const handleRegister = (req, res, db, bcrypt) => {
     const hash = bcrypt.hashSync(password, saltRounds);
 
     knex.select('*').from('users')
-        .where({ mobileNumber: 'mobilenumber' })
+        .where({ mobilenumber: mobileNumber })
         .then(user => {
             return res.status(400).json('This mobile number is already registeres!')
         })
