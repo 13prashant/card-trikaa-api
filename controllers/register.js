@@ -1,3 +1,5 @@
+const { default: knex } = require("knex");
+
 const saltRounds = 10;
 
 const handleRegister = (req, res, db, bcrypt) => {
@@ -8,6 +10,12 @@ const handleRegister = (req, res, db, bcrypt) => {
     // }
 
     const hash = bcrypt.hashSync(password, saltRounds);
+
+    knex.select('*').from('users')
+        .where({ mobileNumber: 'mobilenumber' })
+        .then(user => {
+            res.status(400).json('This mobile number is already registeres!')
+        })
 
     db.transaction(trx => {
         trx.insert({
