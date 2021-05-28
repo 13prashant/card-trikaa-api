@@ -13,7 +13,6 @@ const handleUsername = (req, res, db) => {
 
 const e = require("express");
 
-
 const handleUpdate = (req, res, db) => {
     const { id } = req.params
     const {

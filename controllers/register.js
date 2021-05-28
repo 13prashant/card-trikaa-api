@@ -1,5 +1,3 @@
-const { default: knex } = require("knex");
-
 const saltRounds = 10;
 
 const handleRegister = (req, res, db, bcrypt) => {
@@ -8,13 +6,22 @@ const handleRegister = (req, res, db, bcrypt) => {
     // if (!mobileNumber || !email || !firstName || !lastName || !username || !password) {
     //     return res.status(400).json('cannot register!')
     // }
-
     const hash = bcrypt.hashSync(password, saltRounds);
 
-    knex.select('*').from('users')
-        .where({ mobilenumber: mobileNumber })
-        .then(user => {
-            return res.status(400).json('This mobile number is already registeres!')
+    db.select('*').from('login')
+        .where('mobilenumber', '=', mobileNumber)
+        .then(data => {
+            if (data.length) {
+                return res.status(400).json('This mobile number is already registered!')
+            }
+        })
+
+    db.select('*').from('login')
+        .where('username', '=', username)
+        .then(data => {
+            if (data.length) {
+                return res.status(400).json('This username is not available!')
+            }
         })
 
     db.transaction(trx => {

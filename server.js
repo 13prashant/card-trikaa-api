@@ -14,6 +14,16 @@ app.use(cors())
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
+// const db = knex({
+//     client: 'pg',
+//     connection: {
+//         host: '127.0.0.1',
+//         user: 'postgres',
+//         password: 'prashant',
+//         database: 'cardtrikaa'
+//     }
+// })
+
 const db = knex({
     client: 'pg',
     connection: {
@@ -25,9 +35,8 @@ const db = knex({
     // }
 });
 
-
 app.get('/', (req, res) => {
-    res.send('it is working!')
+    res.json('it is working!')
 })
 
 app.post('/login', (req, res) => login.handleLogIn(req, res, db, bcrypt))
