@@ -44,9 +44,9 @@ app.post('/register', (req, res) => register.handleRegister(req, res, db, bcrypt
 app.put('/:id', (req, res) => profile.handleUpdate(req, res, db))
 app.get('/:user', (req, res) => profile.handleUsername(req, res, db))
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 5000
 
-app.listen(PORT || 5000, () => {
+app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}.`)
 })
 
