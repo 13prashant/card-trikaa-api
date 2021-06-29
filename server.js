@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const knex = require('knex')
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 const login = require('./controllers/login')
 const register = require('./controllers/register')
@@ -13,27 +14,27 @@ app.use(express.json())
 app.use(cors())
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-
-// const db = knex({
-//     client: 'pg',
-//     connection: {
-//         host: '127.0.0.1',
-//         user: 'postgres',
-//         password: 'prashant',
-//         database: 'cardtrikaa'
-//     }
-// })
-
-const db = knex({
-    client: 'pg',
-    connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: true
-    }
-    // ssl: {
-    //     rejectUnauthorized: false
-    // }
-});
+const db = 
+    process.env.NODE_ENVIRONMENT === 'development' ? 
+    knex({
+        client: 'pg',
+        connection: {
+            host: '127.0.0.1',
+            user: 'postgres',
+            password: 'prashant',
+            database: 'cardtrikaa'
+        }
+    }) : 
+    knex({
+        client: 'pg',
+        connection: {
+            connectionString: process.env.DATABASE_URL,
+            ssl: true
+        }
+            // ssl: {
+            //     rejectUnauthorized: false
+            // }
+    });
 
 app.get('/', (req, res) => {
     res.json('it is working!')
@@ -49,9 +50,6 @@ const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}.`)
 })
-
-
-
 
 
 // CREATE TABLE users(
