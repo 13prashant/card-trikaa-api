@@ -26,6 +26,7 @@ const handleRegister = (req, res, db, bcrypt) => {
 
     db.transaction(async (trx) => {
         try {
+            let user;
             await Promise.all([
                 trx('login').insert({
                     mobilenumber: mobileNumber,
@@ -39,13 +40,22 @@ const handleRegister = (req, res, db, bcrypt) => {
                     mobilenumber: mobileNumber,
                     joined: new Date()
                 }),
-            ]).then(xyz => {
-                res.json('success')
+            ]).then(([result1, result2]) => {
+                console.log('success')
             })
         } catch (error) {
+            console.log(error)
             return res.status(400).json('unable to register!')
         }
-    });
+    }).then((result) => {
+        db.select('*').from('users')
+        .where('username', '=', username)
+        .then(data => {
+            if (data.length) {
+                return res.json(data[0])
+            }
+        })
+    })
 }
 
 module.exports = {
