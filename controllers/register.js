@@ -24,32 +24,38 @@ const handleRegister = (req, res, db, bcrypt) => {
             }
         })
 
-    db.transaction(trx => {
-        trx.insert({
-            mobilenumber: mobileNumber,
-            username: username,
-            hash: hash
-        })
-            .into('login')
-            .returning(['mobilenumber', 'username'])
-            .then(loginUser => {
-                trx('users')
-                    .returning('*')
-                    .insert({
-                        username: loginUser[0].username,
-                        firstname: firstName,
-                        lastname: lastName,
-                        mobilenumber: loginUser[0].mobilenumber,
-                        joined: new Date()
-                    })
-                    .then(user => {
-                        res.json(user[0])
-                    })
+    db.transaction(async (trx) => {
+        try {
+            let user;
+            await Promise.all([
+                trx('login').insert({
+                    mobilenumber: mobileNumber,
+                    username: username,
+                    hash: hash
+                }),
+                trx('users').insert({
+                    username: username,
+                    firstname: firstName,
+                    lastname: lastName,
+                    mobilenumber: mobileNumber,
+                    joined: new Date()
+                }),
+            ]).then(([result1, result2]) => {
+                console.log('success')
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json('unable to register!')
+        }
+    }).then((result) => {
+        db.select('*').from('users')
+        .where('username', '=', username)
+        .then(data => {
+            if (data.length) {
+                return res.json(data[0])
+            }
+        })
     })
-        .catch(error => res.status(400).json('unable to register!'))
 }
 
 module.exports = {
